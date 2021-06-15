@@ -24,7 +24,7 @@ namespace norbert
         color_t & at(std::size_t const line, std::size_t const column);
         color_t at(std::size_t const line, std::size_t const column) const;
 
-        std::vector<std::pair<std::size_t, std::size_t>> left_up_neightbor_indices(std::size_t const line, std::size_t const column) const noexcept;
+        static std::vector<std::pair<std::size_t, std::size_t>> left_up_neightbor_indices(std::size_t const line, std::size_t const column) noexcept;
 
         std::size_t height() const noexcept;
         std::size_t width() const noexcept;
