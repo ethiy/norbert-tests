@@ -59,7 +59,50 @@
             Check folder xxx
 
     \section*{Audio coughing detection}
-        The goal 
+        Since the intraclass variance of the \texttt{breathing} class is very high compared to \texttt{coughing} class, the first thing to be done is to consider a mutliclass classification instead of a binary one.
+        These classes would be: \texttt{coughing}, \texttt{normal breathing}, \texttt{wheezing}, \texttt{snoring}, \texttt{gasping}, \texttt{panting} and \texttt{snorting}.
+        There are in total seven classes.
+        For the moment classes are supposed to be exclusive (i.e. not a multilabel problem) if we suppose that observations are small in length.
+
+        We suppose that all audio files have the same number of channels, the same sampling resolution and the same length.
+        Different approaches could be used.
+        Each one is detailed in the following sectionss.
+
+        The dataset should be divided to two sets.
+        A validation set containing a representative amount of each class, containing ideally 10\% of signals in total for instance.
+        The goal of such a set is to control the performance of each approach.
+        The rest is used for training using a 10-fold stratified cross validation approach in order to calibrate the parameters of the used models.
+
+        \subsection*{Naive approach}
+            Use the Mel spectrogram to respresent the signal.
+            The latter relies on respresenting the signal by a windowed fourier transform with frequencies mapped to the Mel scale.
+            In order to reduce the number of coefficients, one would compute a histogram for each Mel frequency across time.
+            The resulting matrix (\(number\_of\_frequencies \times number\_of\_bins\)) will be flattened to obtain a feature vector per audio signal.
+            This feature vector will be fed to a supervised classifier such as SVM or Random Forest.
+        
+        \subsection*{Scattering transform}
+            The scattering transform could be seen as a multiscale generalization of the Mel spectrogram~\cite{anden2011multiscale}.
+            As such, instead of computing the Mel spectrogram as in the previous approach, we can compute the scattering transform of each signal.
+            This will result in a cascade of coefficients that could be reduced using once again a histogram.
+            The resulting feature vector is then fed to a classifier as before.
+
+        \subsection*{CNN on Mel spectrogram}
+            The Mel spectrogram is seen here as a single channel image.
+            Based on this observation, one way of computing better features would be to train a single channel CNN with a cross entropy loss.
+            The learned filters would look at neighboring times and frequencies for short range (in time and in frequencies) patterns in the signal.
+
+        \subsection*{Naive LSTM}
+            Another approach would be the use the Recurrent neural networks for classifying the audio signals.
+            Since the whole signal is classified, a long range in time is needed.
+            That is why Long Short Term Memory (LSTM) networks seem like a good choice.
+            In this case, the LSTM is applied to the raw signal.
+            This is not supposed to work well but should be tried nonetheless as a second baseline.
+        
+        \subsection*{Mel LSTM}
+            Instead of applying the LSTM directly on the signal, first the Mel spectrogram is computed.
+            For eah time the network is fed the frequency amplitudes as features.
+            This is expected to work best for this problem.
+
     \bibliographystyle{plain}
     \bibliography{references}
 \end{document}
