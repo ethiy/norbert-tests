@@ -5,7 +5,8 @@
 
 int main(int argc, char* argv[])
 {
-    norbert::Image<bool> zero(4, 5);
-    std::cout << zero << std::endl;
+    norbert::Image<std::uint16_t> test(4, 5);
+    test.at(1, 2) = 1;
+    std::cout << test << std::endl;
     return EXIT_SUCCESS;
 }
