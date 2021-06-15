@@ -60,6 +60,28 @@ namespace norbert
 
 
     template<typename color_t>
+    std::vector<std::pair<std::size_t, std::size_t>> Image<color_t>::left_up_neightbor_indices(std::size_t const line, std::size_t const column) const noexcept
+    {
+        if(line && column)
+            return std::vector<std::pair<std::size_t, std::size_t>>{
+                std::make_pair(line - 1, column),
+                std::make_pair(line - 1, column - 1),
+                std::make_pair(line, column - 1)
+            };
+        else if (!line && column)
+            return std::vector<std::pair<std::size_t, std::size_t>>{
+                std::make_pair(line, column - 1)
+            };
+        else if (line && !column)
+            return std::vector<std::pair<std::size_t, std::size_t>>{
+                std::make_pair(line - 1, column)
+            };
+        else
+            return std::vector<std::pair<std::size_t, std::size_t>>();
+    }
+
+
+    template<typename color_t>
     std::size_t Image<color_t>::height() const noexcept
     {
         return height_;
