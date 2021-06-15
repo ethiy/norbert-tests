@@ -7,12 +7,6 @@
 namespace norbert
 {
     template<typename color_t>
-    class Image;
-
-    template<typename color_t>
-    std::ostream & operator <<(std::ostream & out, Image<color_t> const& image);
-
-    template<typename color_t>
     class Image
     {
     public:
@@ -29,7 +23,8 @@ namespace norbert
         color_t & at(std::size_t const line, std::size_t const column);
         color_t at(std::size_t const line, std::size_t const column) const;
 
-        friend std::ostream & operator <<<color_t>(std::ostream & out, Image const& image);
+        std::size_t height() const noexcept;
+        std::size_t width() const noexcept;
 
     protected:
         void check_line(std::size_t const line) const;
@@ -39,7 +34,10 @@ namespace norbert
         std::size_t height_;
         std::size_t width_;
         std::vector<color_t> values_;
-    };    
+    };
+
+    template<typename color_t>
+    std::ostream & operator <<(std::ostream & out, Image<color_t> const& image);
 }
 
 #include <norbert/image.hxx>

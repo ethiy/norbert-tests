@@ -60,12 +60,24 @@ namespace norbert
 
 
     template<typename color_t>
+    std::size_t Image<color_t>::height() const noexcept
+    {
+        return height_;
+    }
+    template<typename color_t>
+    std::size_t Image<color_t>::width() const noexcept
+    {
+        return width_;
+    }
+
+
+    template<typename color_t>
     std::ostream & operator <<(std::ostream & out, Image<color_t> const& image)
     {
-        for(std::size_t line(0); line != image.height_; ++line)
+        for(std::size_t line(0); line != image.height(); ++line)
         {
             out << image.at(line, 0);
-            for(std::size_t column(1); column != image.width_; ++column)
+            for(std::size_t column(1); column != image.width(); ++column)
                 out << " " << image.at(line, column);
             out << std::endl;
         }
