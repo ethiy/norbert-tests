@@ -1,6 +1,8 @@
 #pragma once
 
 #include <norbert/image.hpp>
+#include <functional>
+#include <tuple>
 
 namespace norbert
 {
@@ -21,11 +23,13 @@ namespace norbert
         color_t & at(std::size_t const plane, std::size_t const line, std::size_t const column);
         color_t at(std::size_t const plane, std::size_t const line, std::size_t const column) const;
 
+        static std::vector<std::tuple<std::size_t, std::size_t, std::size_t>> get_left_up_front_neightbors_indices(std::size_t const plane, std::size_t const line, std::size_t const column) noexcept;
+
         using Image<color_t>::height;
         using Image<color_t>::width;
         std::size_t depth() const noexcept;
 
-        
+        Volume<std::size_t> label_components() const noexcept;
 
     private:
         std::size_t depth_;
