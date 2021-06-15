@@ -1,0 +1,65 @@
+\documentclass[10pt]{article}
+\usepackage{geometry}
+\geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\usepackage[]{algorithm2e}
+
+\usepackage{hyperref}
+
+\title{Norbert Health tests}
+\author{Oussama Ennafii}
+
+\begin{document}
+    \maketitle
+
+    \section*{Computer Vision}
+        \subsection*{\# 1}
+            In order to register the two images, one can make use of a standard procedure in 3D vision for finding a rigid transformation (RANSAC) from one image to the other.
+            This supposes that both images do not suffer from distortion.
+            This process relies on three steps:
+            \begin{enumerate}
+                \item Detect invariant interest points based on efficient methods such as SIFT, SURF or ORB.
+                \item Match the interest points based on their descriptors.
+                \item Use a RANSAC derived method to find the corresponding homography which will be robust to outlier matches.
+            \end{enumerate}
+            This is described in details in Alg.~\ref{alg::ransac_homography}.
+
+            \begin{algorithm}[htb]
+                \KwData{\texttt{lwir\_image}, \texttt{gray\_image}, \texttt{interest\_point\_type} \(\in \{SIFT, SURF, ORB\}\), \texttt{descriptor\_distance}, \texttt{min\_matches}}
+                \KwResult{Registered LWIR image.}
+
+                lwir\_points, lwir\_descriptors = compute\_interest\_points(\texttt{lwir\_image}, \texttt{interest\_point\_type})\;
+                gray\_points, gray\_descriptors = compute\_interest\_points(\texttt{gray\_image}, \texttt{interest\_point\_type})\;
+
+                matches = knn\_matches(lwir\_descriptors, gray\_descriptors, \texttt{descriptor\_distance})\;
+                fitered\_matches = lowe\_ratio\_test(matches, ratio = 0.7)\;
+                \If{\(\vert\)fitered\_matches\(\vert\) < \texttt{min\_matches}}{
+                    raise runtime\_error("Insufficient matches to compute registration")\;
+                }
+                \(H\) = compute\_homography(lwir\_points, gray\_points, matches)\;
+                registered\_lwir\_image = apply\_homography(\texttt{lwir\_image}, \(H\))\;
+                \caption{\label{alg::ransac_homography} RANSAC based registration.}
+            \end{algorithm}
+
+            Since both images do not have the same domain the descriptors may not be well suited in this case.
+            \cite{huo2011multilevel} proposes the use a restricted SURF or SIFT in scale to alleviate this problem.
+            In order to solve this problem of descriptor domain mismatch, other approaches could be used.
+            One way to do so would be to learn a useful distance function between these descriptors.
+            Another way would rely on extracting edges (with Canny Edge detector for instance) and trying to match the corresponding edges (with Iterative Closest Point (ICP) for example).
+
+            LWIR images once registered could be used to compute a thermal (heat) map for a patient for instance.
+        
+        \subsection*{\# 2}
+            Check folder xxx
+
+    \section*{Audio coughing detection}
+        The goal 
+    \bibliographystyle{plain}
+    \bibliography{references}
+\end{document}
