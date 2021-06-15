@@ -5,4 +5,4 @@ set(manual_image_test_SRC
 )
 
 add_executable(manual_image_test ${manual_image_test_SRC})
-target_link_libraries(manual_image_test norbert.volume)
+target_link_libraries(manual_image_test norbert)

@@ -1,8 +1,7 @@
 include_directories(BEFORE "${PROJECT_SOURCE_DIR}/src/lib")
 
-set(volume_SRC
-    "${PROJECT_SOURCE_DIR}/src/lib/norbert/volume.cpp"
+set(norbert_SRC
+    "${PROJECT_SOURCE_DIR}/src/lib/norbert/algorithms.cpp"
 )
 
-add_library(norbert.volume ${volume_SRC})
-# target_link_libraries(norbert.volume)
+add_library(norbert ${norbert_SRC})

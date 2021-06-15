@@ -25,6 +25,8 @@ namespace norbert
         using Image<color_t>::width;
         std::size_t depth() const noexcept;
 
+        
+
     private:
         std::size_t depth_;
 
