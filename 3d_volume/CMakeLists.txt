@@ -9,8 +9,8 @@ include(CheckCXXCompilerFlag)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-# conan_basic_setup(TARGETS)
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
 
 include_directories(BEFORE "${PROJECT_SOURCE_DIR}/src/include")
 
