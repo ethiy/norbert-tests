@@ -60,11 +60,11 @@ namespace norbert
     template<typename color_t>
     Volume<std::size_t> Volume<color_t>::label_components() const noexcept
     {
-        Volume<std::size_t> label_components_(depth_, height(), width(), 0);
+        Volume<std::size_t> label_components_(depth_, height(), width());
         auto max_components = max_number_connected_components();
         std::vector<std::size_t> rank(max_components);
         std::vector<std::size_t> parent(max_components);
-        boost::disjoint_sets<std::size_t*,std::size_t*> equivalence_map(&rank[0], &parent[0]);
+        boost::disjoint_sets equivalence_map(&rank[0], &parent[0]);
 
         first_connectivity_pass(label_components_, equivalence_map);
 
@@ -72,9 +72,9 @@ namespace norbert
             for(std::size_t line(0); line != height(); ++line)
                 for(std::size_t column(0); column != width(); ++column)
                 {
-                    auto label = label_components_.at(plane, line, width);
+                    auto label = label_components_.at(plane, line, column);
                     if(label)
-                        label_components_.at(plane, line, width) = equivalence_map.find_set(label);
+                        label_components_.at(plane, line, column) = equivalence_map.find_set(label);
                 }
         return label_components_;
     }
@@ -86,14 +86,14 @@ namespace norbert
         std::size_t max_label(0);
         std::set<std::size_t> unique_neighbor_values;
 
-        for(std::size_t plane(0); plane != depth_; ++plane)
+        for(std::size_t plane(0); plane < depth_; ++plane)
             for(std::size_t line(0); line != height(); ++line)
                 for(std::size_t column(0); column != width(); ++column)
-                    if(at(plane, line, width))
+                    if(at(plane, line, column))
                     {
                         for(auto && [neighbor_plane, neighbor_line, neighbor_column] : connectivity_neightbor_indices_3d(plane, line, column, width(), depth_))
                         {
-                            std::size_t label = label_components_.at(neighbor_line, neighbor_column, neighbor_plane);
+                            std::size_t label = label_components_.at(neighbor_plane, neighbor_line, neighbor_column);
                             if(label)
                                 unique_neighbor_values.insert(label);
                         }
