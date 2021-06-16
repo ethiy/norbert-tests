@@ -10,7 +10,7 @@ namespace norbert
 {
     template<typename color_t>
     Volume<color_t>::Volume(std::size_t const depth, std::size_t const height, std::size_t const width, color_t const value)
-        : Image<color_t>(depth * height, width, value), depth_(depth)
+        : Image<color_t>(depth * height, width, value), height_(height), depth_(depth)
     {}
 
     template<typename color_t>
@@ -26,14 +26,15 @@ namespace norbert
     color_t & Volume<color_t>::at(std::size_t const plane, std::size_t const line, std::size_t const column)
     {
         check_plane(plane);
-        return Image<color_t>::at(plane * height() + line, column);
+        // std::cout <<  << std::endl;
+        return Image<color_t>::at(plane * height_ + line, column);
     }
 
     template<typename color_t>
     color_t Volume<color_t>::at(std::size_t const plane, std::size_t const line, std::size_t const column) const
     {
         check_plane(plane);
-        return Image<color_t>::at(plane * height() + line, column);
+        return Image<color_t>::at(plane * height_ + line, column);
     }
 
     template<typename color_t>
@@ -53,14 +54,14 @@ namespace norbert
     template<typename color_t>
     std::size_t Volume<color_t>::max_number_connected_components() const noexcept
     {
-        return ((depth_ + 2) * (height() + 2) * (width() + 2)) / 27 + 1;
+        return ((depth_ + 2) * (height_ + 2) * (width() + 2)) / 27 + 1;
     }
 
 
     template<typename color_t>
     Volume<std::size_t> Volume<color_t>::label_components() const noexcept
     {
-        Volume<std::size_t> label_components_(depth_, height(), width());
+        Volume<std::size_t> label_components_(depth_, height_, width());
         auto max_components = max_number_connected_components();
         std::vector<std::size_t> rank(max_components);
         std::vector<std::size_t> parent(max_components);
@@ -69,7 +70,7 @@ namespace norbert
         first_connectivity_pass(label_components_, equivalence_map);
 
         for(std::size_t plane(0); plane != depth_; ++plane)
-            for(std::size_t line(0); line != height(); ++line)
+            for(std::size_t line(0); line != height_; ++line)
                 for(std::size_t column(0); column != width(); ++column)
                 {
                     auto label = label_components_.at(plane, line, column);
@@ -87,7 +88,7 @@ namespace norbert
         std::set<std::size_t> unique_neighbor_values;
 
         for(std::size_t plane(0); plane < depth_; ++plane)
-            for(std::size_t line(0); line != height(); ++line)
+            for(std::size_t line(0); line != height_; ++line)
                 for(std::size_t column(0); column != width(); ++column)
                     if(at(plane, line, column))
                     {
@@ -118,7 +119,7 @@ namespace norbert
     {
         std::list<std::tuple<std::size_t, std::size_t, std::size_t>> connectivity_neightbor_indices_;
 
-        for(auto && [neighbor_line, neighbor_column] : connectivity_neightbor_indices_2d(line, plane, width))
+        for(auto && [neighbor_line, neighbor_column] : connectivity_neightbor_indices_2d(line, column, width))
         {
             connectivity_neightbor_indices_.push_back(
                 std::make_tuple(

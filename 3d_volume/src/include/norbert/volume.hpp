@@ -33,6 +33,7 @@ namespace norbert
         Volume<std::size_t> label_components() const noexcept;
 
     private:
+        std::size_t height_;
         std::size_t depth_;
 
         void check_plane(std::size_t const plane) const;
