@@ -20,5 +20,26 @@ int main(int argc, char* argv[])
     std::cout << image_test_connected_components << std::endl;
     std::cout << image_test_connected_components.label_components() << std::endl;
 
+    norbert::Volume<std::uint16_t> volume_test_connected_components(3, 4, 5);
+    volume_test_connected_components.at(0, 1, 2) = 1;
+    volume_test_connected_components.at(0, 2, 1) = 1;
+    volume_test_connected_components.at(0, 2, 3) = 1;
+    volume_test_connected_components.at(2, 1, 2) = 1;
+    volume_test_connected_components.at(2, 2, 1) = 1;
+    volume_test_connected_components.at(2, 2, 3) = 1;
+    std::cout << volume_test_connected_components << std::endl;
+    std::cout << volume_test_connected_components.label_components() << std::endl;
+
+    norbert::Volume<std::uint16_t> volume_test_disconnected_components(3, 4, 5);
+    volume_test_connected_components.at(0, 1, 2) = 1;
+    volume_test_connected_components.at(0, 2, 1) = 1;
+    volume_test_connected_components.at(0, 2, 3) = 1;
+    volume_test_connected_components.at(1, 3, 2) = 1;
+    volume_test_connected_components.at(2, 1, 2) = 1;
+    volume_test_connected_components.at(2, 2, 1) = 1;
+    volume_test_connected_components.at(2, 2, 3) = 1;
+    std::cout << volume_test_connected_components << std::endl;
+    std::cout << volume_test_connected_components.label_components() << std::endl;
+
     return EXIT_SUCCESS;
 }
