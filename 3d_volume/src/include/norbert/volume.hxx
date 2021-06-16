@@ -3,7 +3,6 @@
 #include <norbert/volume.hpp>
 
 #include <cmath>
-#include <set>
 
 
 namespace norbert
@@ -26,7 +25,6 @@ namespace norbert
     color_t & Volume<color_t>::at(std::size_t const plane, std::size_t const line, std::size_t const column)
     {
         check_plane(plane);
-        // std::cout <<  << std::endl;
         return Image<color_t>::at(plane * height_ + line, column);
     }
 
@@ -66,8 +64,11 @@ namespace norbert
         std::vector<std::size_t> rank(max_components);
         std::vector<std::size_t> parent(max_components);
         boost::disjoint_sets equivalence_map(&rank[0], &parent[0]);
+        std::set<std::size_t> labels;
 
-        first_connectivity_pass(label_components_, equivalence_map);
+        first_connectivity_pass(label_components_, equivalence_map, labels);
+
+        equivalence_map.normalize_sets(std::begin(labels), std::end(labels));
 
         for(std::size_t plane(0); plane != depth_; ++plane)
             for(std::size_t line(0); line != height_; ++line)
@@ -82,7 +83,7 @@ namespace norbert
 
 
     template<typename color_t>
-    void Volume<color_t>::first_connectivity_pass(Volume<std::size_t> & label_components_, boost::disjoint_sets<std::size_t*,std::size_t*> & equivalence_map) const
+    void Volume<color_t>::first_connectivity_pass(Volume<std::size_t> & label_components_, boost::disjoint_sets<std::size_t*,std::size_t*> & equivalence_map, std::set<std::size_t> & labels) const
     {
         std::size_t max_label(0);
         std::set<std::size_t> unique_neighbor_values;
@@ -101,6 +102,7 @@ namespace norbert
                         if(unique_neighbor_values.empty())
                         {
                             equivalence_map.make_set(++max_label);
+                            labels.insert(max_label);
                             label_components_.at(plane, line, column) = max_label;
                         }
                         else

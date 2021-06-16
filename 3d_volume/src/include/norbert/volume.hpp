@@ -3,6 +3,7 @@
 #include <norbert/image.hpp>
 #include <functional>
 #include <tuple>
+#include <set>
 #include <boost/pending/disjoint_sets.hpp>
 
 
@@ -38,7 +39,7 @@ namespace norbert
 
         void check_plane(std::size_t const plane) const;
 
-        void first_connectivity_pass(Volume<std::size_t> & label_components_, boost::disjoint_sets<std::size_t*,std::size_t*> & equivalence_map) const;
+        void first_connectivity_pass(Volume<std::size_t> & label_components_, boost::disjoint_sets<std::size_t*,std::size_t*> & equivalence_map, std::set<std::size_t> & labels) const;
     };
 
     std::list<std::tuple<std::size_t, std::size_t, std::size_t>> connectivity_neightbor_indices_3d(std::size_t const plane, std::size_t const line, std::size_t const column, std::size_t const height, std::size_t const width) noexcept;
