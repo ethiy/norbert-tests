@@ -38,7 +38,7 @@ namespace norbert
         std::vector<color_t> values_;
     };
 
-    std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_2d(std::size_t const line, std::size_t const column, std::size_t const width) noexcept;
+    std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_2d(std::size_t const line, std::size_t const column, std::size_t const height, std::size_t const width, bool const is_3d = true) noexcept;
 
     template<typename color_t>
     std::ostream & operator <<(std::ostream & out, Image<color_t> const& image);

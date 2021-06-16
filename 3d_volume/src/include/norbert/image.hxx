@@ -71,7 +71,7 @@ namespace norbert
     }
 
 
-    std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_2d(std::size_t const line, std::size_t const column, std::size_t const width) noexcept
+    std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_2d(std::size_t const line, std::size_t const column, std::size_t const height, std::size_t const width, bool const is_3d) noexcept
     {
         std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_;
         if(line && column)
@@ -90,6 +90,13 @@ namespace norbert
 
         if (line && column < width - 1)
             connectivity_neightbor_indices_.emplace_back(std::make_pair(line - 1, column + 1));
+        
+        if(is_3d && line < height - 1)
+        {
+            connectivity_neightbor_indices_.emplace_back(std::make_pair(line + 1, column));
+            if(column)
+                connectivity_neightbor_indices_.emplace_back(std::make_pair(line + 1, column - 1));
+        }
                 
         return connectivity_neightbor_indices_;
     }

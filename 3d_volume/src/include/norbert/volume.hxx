@@ -92,7 +92,7 @@ namespace norbert
                 for(std::size_t column(0); column != width(); ++column)
                     if(at(plane, line, column))
                     {
-                        for(auto && [neighbor_plane, neighbor_line, neighbor_column] : connectivity_neightbor_indices_3d(plane, line, column, width(), depth_))
+                        for(auto && [neighbor_plane, neighbor_line, neighbor_column] : connectivity_neightbor_indices_3d(plane, line, column, height_, width()))
                         {
                             std::size_t label = label_components_.at(neighbor_plane, neighbor_line, neighbor_column);
                             if(label)
@@ -115,11 +115,11 @@ namespace norbert
     }
 
 
-    std::list<std::tuple<std::size_t, std::size_t, std::size_t>> connectivity_neightbor_indices_3d(std::size_t const plane, std::size_t const line, std::size_t const column, std::size_t const width, std::size_t depth) noexcept
+    std::list<std::tuple<std::size_t, std::size_t, std::size_t>> connectivity_neightbor_indices_3d(std::size_t const plane, std::size_t const line, std::size_t const column, std::size_t const height, std::size_t const width) noexcept
     {
         std::list<std::tuple<std::size_t, std::size_t, std::size_t>> connectivity_neightbor_indices_;
 
-        for(auto && [neighbor_line, neighbor_column] : connectivity_neightbor_indices_2d(line, column, width))
+        for(auto && [neighbor_line, neighbor_column] : connectivity_neightbor_indices_2d(line, column, height, width))
         {
             connectivity_neightbor_indices_.push_back(
                 std::make_tuple(
@@ -132,14 +132,6 @@ namespace norbert
                 connectivity_neightbor_indices_.push_back(
                     std::make_tuple(
                         plane - 1,
-                        neighbor_line,
-                        neighbor_column
-                    )
-                );
-            if(plane < depth - 1)
-                connectivity_neightbor_indices_.push_back(
-                    std::make_tuple(
-                        plane + 1,
                         neighbor_line,
                         neighbor_column
                     )
