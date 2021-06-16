@@ -60,28 +60,6 @@ namespace norbert
 
 
     template<typename color_t>
-    std::vector<std::pair<std::size_t, std::size_t>> Image<color_t>::left_up_neightbor_indices(std::size_t const line, std::size_t const column) noexcept
-    {
-        if(line && column)
-            return std::vector<std::pair<std::size_t, std::size_t>>{
-                std::make_pair(line - 1, column),
-                std::make_pair(line - 1, column - 1),
-                std::make_pair(line, column - 1)
-            };
-        else if (!line && column)
-            return std::vector<std::pair<std::size_t, std::size_t>>{
-                std::make_pair(line, column - 1)
-            };
-        else if (line && !column)
-            return std::vector<std::pair<std::size_t, std::size_t>>{
-                std::make_pair(line - 1, column)
-            };
-        else
-            return std::vector<std::pair<std::size_t, std::size_t>>();
-    }
-
-
-    template<typename color_t>
     std::size_t Image<color_t>::height() const noexcept
     {
         return height_;
@@ -90,6 +68,30 @@ namespace norbert
     std::size_t Image<color_t>::width() const noexcept
     {
         return width_;
+    }
+
+
+    std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_2d(std::size_t const line, std::size_t const column, std::size_t const width) noexcept
+    {
+        std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_;
+        if(line && column)
+            connectivity_neightbor_indices_.splice(
+                std::end(connectivity_neightbor_indices_),
+                std::list<std::pair<std::size_t, std::size_t>>{
+                    std::make_pair(line - 1, column),
+                    std::make_pair(line - 1, column - 1),
+                    std::make_pair(line, column - 1)
+                }
+            );
+        if(!line && column)
+            connectivity_neightbor_indices_.emplace_back(std::make_pair(line, column - 1));
+        if(line && !column)
+            connectivity_neightbor_indices_.emplace_back(std::make_pair(line - 1, column));
+
+        if (line && column < width - 1)
+            connectivity_neightbor_indices_.emplace_back(std::make_pair(line - 1, column + 1));
+                
+        return connectivity_neightbor_indices_;
     }
 
 

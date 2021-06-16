@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <utility>
+#include <list>
 
 
 namespace norbert
@@ -24,8 +25,6 @@ namespace norbert
         color_t & at(std::size_t const line, std::size_t const column);
         color_t at(std::size_t const line, std::size_t const column) const;
 
-        static std::vector<std::pair<std::size_t, std::size_t>> left_up_neightbor_indices(std::size_t const line, std::size_t const column) noexcept;
-
         std::size_t height() const noexcept;
         std::size_t width() const noexcept;
 
@@ -38,6 +37,8 @@ namespace norbert
         std::size_t width_;
         std::vector<color_t> values_;
     };
+
+    std::list<std::pair<std::size_t, std::size_t>> connectivity_neightbor_indices_2d(std::size_t const line, std::size_t const column, std::size_t const width) noexcept;
 
     template<typename color_t>
     std::ostream & operator <<(std::ostream & out, Image<color_t> const& image);
