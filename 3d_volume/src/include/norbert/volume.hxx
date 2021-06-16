@@ -10,7 +10,7 @@ namespace norbert
 {
     template<typename color_t>
     Volume<color_t>::Volume(std::size_t const depth, std::size_t const height, std::size_t const width, color_t const value)
-        : Image<color_t>(depth * height, width, value)
+        : Image<color_t>(depth * height, width, value), depth_(depth)
     {}
 
     template<typename color_t>
