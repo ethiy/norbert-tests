@@ -12,5 +12,13 @@ int main(int argc, char* argv[])
     norbert::Volume<std::uint16_t> test_volume(3, 4, 5);
     test_volume.at(0, 1, 2) = 1;
     std::cout << test_volume << std::endl;
+
+    norbert::Volume<std::uint16_t> image_test_connected_components(1, 4, 5);
+    image_test_connected_components.at(0, 1, 2) = 1;
+    image_test_connected_components.at(0, 2, 1) = 1;
+    image_test_connected_components.at(0, 2, 3) = 1;
+    std::cout << image_test_connected_components << std::endl;
+    std::cout << image_test_connected_components.label_components() << std::endl;
+
     return EXIT_SUCCESS;
 }
